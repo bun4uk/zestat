@@ -34,7 +34,6 @@
             render();
             setTimeout(() => {
                 load();
-                render();
             }, 30000);
         });
     }
