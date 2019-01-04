@@ -2,17 +2,23 @@
 <project version="4">
   <component name="MessDetector">
     <phpmd_settings>
-      <MessDetectorConfiguration max_messages_per_file="100" tool_path="$USER_HOME$/Documents/io_tests/phpmd/src/bin/phpmd" />
+      <MessDetectorConfiguration max_messages_per_file="100" tool_path="$PROJECT_DIR$/../../../io_tests/phpmd/src/bin/phpmd" />
     </phpmd_settings>
   </component>
   <component name="PhpCodeSniffer">
     <phpcs_settings>
-      <PhpCSConfiguration max_messages_per_file="100" standards="MySource;PEAR;PSR1;PSR2;Squiz;Zend" tool_path="$USER_HOME$/Documents/io_tests/phpcs/bin/phpcs" timeout="20000" />
+      <PhpCSConfiguration max_messages_per_file="100" standards="MySource;PEAR;PSR1;PSR2;Squiz;Zend" tool_path="$PROJECT_DIR$/../../../io_tests/phpcs/bin/phpcs" timeout="20000" />
     </phpcs_settings>
+  </component>
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/smi2/phpclickhouse" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+    </include_path>
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter home="$USER_HOME$/Library/Caches/PhpStorm2018.3/plugins/idea-php-latest-plugin/php-v7.2.12/php.sh" id="8d637790-d592-4cb1-ac78-48f11c14db7b" name="PHP latest" debugger_id="php.debugger.XDebug" />
+      <interpreter home="$USER_HOME$/Library/Caches/PhpStorm2018.3/plugins/idea-php-latest-plugin/php-v7.2.12/php.sh" id="bbcb3b41-ad2d-497a-992b-b4d9d05022a6" name="PHP latest" debugger_id="php.debugger.XDebug" />
     </interpreters>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />

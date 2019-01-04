@@ -27,22 +27,18 @@ $config = [
 $db = new ClickHouseDB\Client($config);
 $db->database('zes');
 
-//$sql = "select * from zes.counter3 WHERE growth != value";
-
+$quantor = $_GET['q'] ?? 5;
+$date = $_GET['date'] ?? (new \DateTimeImmutable())->format('Y-m-d');
 $availableQuantors = [
     1,
     5,
     15,
     60
 ];
-
-$quantor = $_GET['q'] ?? 5;
-
 if (!in_array($quantor, $availableQuantors)) {
     $quantor = 5;
 }
 
-$date = $_GET['date'] ?? (new \DateTimeImmutable())->format('Y-m-d');
 
 switch ($quantor) {
     case 1:
@@ -76,7 +72,6 @@ order by time ASC";
 $res2 = $db->select($sql)->rows();
 
 $rows = $res;
-
 $array = [];
 foreach ($rows as $row) {
     $array['labels'][] = date("Y-m-d H:i:s", strtotime($row['time'] . " + 2 hours"));
@@ -89,6 +84,13 @@ foreach ($res2 as $row) {
     $array2['data'][] = (int)$row['value'];
 }
 
-$result = ['growth' => $array, 'vals' => $array2];
+$sqlTotal = "select 
+              sum(toInt32(growth)) as total 
+            from counter3 
+            where time <> '2019-01-03 21:16:07' 
+            and toDate(time) = '{$date}'";
+$total = $db->select($sqlTotal)->fetchOne();
+
+$result = ['growth' => $array, 'vals' => $array2, 'total' => $total['total']];
 echo json_encode($result);
 die;
