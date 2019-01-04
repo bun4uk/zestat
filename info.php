@@ -6,22 +6,36 @@
  * Time: 18:25
  */
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "ze";
-$conn = new mysqli($servername, $username, $password, $dbname);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+//include_once 'PDOlib/mysql.php';
+
+require_once dirname(__FILE__).'/vendor/autoload.php';
 
 
-$sql = 'select * from counter';
-$res = $conn->query($sql);
+$config = [
+    'host' => '127.0.0.1',
+    'port' => '8123',
+    'username' => 'default',
+    'password' => ''
+];
 
-$rows = $res->fetch_all();
+$db = new ClickHouseDB\Client($config);
+$db->database('zes');
+
+$sql = "select * from zes.counter3 WHERE growth != value";
+$res = $db->select($sql)->rows();
+
+//print_r($res);
+
+$rows = $res;
 
 $array = [];
 foreach ($rows as $row) {
-    $array['labels'][] = $row[0];
-    $array['data'][] = (int)$row[2];
+    $array['labels'][] = $row['time'];
+    $array['data'][] = (int)$row['growth'];
 }
 
 print_r(json_encode($array));

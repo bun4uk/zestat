@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>ZE stat</title>
     <style>
         body {
             background-color: #04133b;
@@ -15,6 +15,10 @@
     </style>
 </head>
 <body>
+<div style="text-align: center">
+    <h1 style="color: #fff;">Статистика анкет на сайте Ze2019.com</h1>
+    <h4 style="color: #ccc;">* обновляется раз в минуту</h4>
+</div>
 <div class="chartBody">
     <canvas id="myChart" style="height:50vh; width:80vw"></canvas>
 </div>
@@ -26,16 +30,14 @@
     load();
 
     function load() {
-        fetch('http://127.0.0.1:8080/info.php')
-            .then((response) =>
-                response.json()
-            ).then((json) => {
-            data = json;
-            render();
-            setTimeout(() => {
-                load();
-            }, 30000);
-        });
+        fetch('/info.php')
+            .then((response) => response.json())
+            .then((json) => {
+                data = json;
+                render();
+
+                setTimeout(load, 30000);
+            });
     }
 
 
@@ -51,7 +53,8 @@
                     label: 'Growth',
                     borderColor: '#2aabff',
                     backgroundColor: 'rgba(41,169,255,0.3)',
-                    pointBackgroundColor: '#2aabff'
+                    pointBackgroundColor: '#2aabff',
+                    pointRadius: 2
 
                 }]
             },
@@ -79,7 +82,18 @@
             }
         });
     }
-
 </script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-129298968-2"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-129298968-2');
+</script>
+
+
 </body>
 </html>

@@ -1,43 +1,44 @@
 <?php
 
 //https://ze2019.com/storage/counters.json?rand=192434
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+include_once 'PDOlib/mysql.php';
 
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "ze";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-echo "Connected successfully \n";
+$dbname = "zes";
 
 
-while (1) {
-    $response = file_get_contents('https://ze2019.com/storage/counters.json?rand=' . rand());
-    $response = json_decode($response, 1);
-    $result = reset($response);
+$mysql = new PdoLibMysql($servername, '3306', $dbname, $username, $password);
+
+//$res = $mysql->selectCell('select NOW()');
 
 
-    $growthSql = 'select value from ze.counter order by date desc limit 1';
-    $res = $conn->query($growthSql);
-    $row = $res->fetch_assoc();
-
-    $prevValue = $row['value'];
-    $growth = $result - $prevValue;
+//while (1) {
+$response = file_get_contents('https://ze2019.com/storage/counters.json?rand=' . rand());
+$response = json_decode($response, 1);
+$result = reset($response);
 
 
-    $sql = "insert into ze.counter values (NOW(), {$result}, {$growth})";
-    if ($conn->query($sql) === true) {
-        echo "COUNTER: {$result}" . PHP_EOL;
-        echo "GROWTH: {$growth}" . PHP_EOL;
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-    sleep(60);
-}
+$growthSql = 'select value from ' . $dbname . '.counter order by date desc limit 1';
+
+$prevValue = 0;
+$growth = 0;
+
+$prevValue = $mysql->selectCell($growthSql);
+
+$growth = $result - $prevValue;
+
+
+$sql = "insert into counter(date, value, growth) values (NOW(), {$result}, {$growth})";
+
+$res = $mysql->query($sql);
+
+echo "COUNTER: {$result}" . PHP_EOL;
+echo "GROWTH: {$growth}" . PHP_EOL;
+//    sleep(60);
+//}
