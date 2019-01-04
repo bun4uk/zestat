@@ -59,7 +59,7 @@ switch ($quantor) {
 
 $sql = "select sum(toInt16(growth)) as growth, {$quantorFunction} as time 
  FROM zes.counter3
- WHERE date >= '2019-01-04'
+ WHERE time >= '2019-01-03 21:00:00'
  GROUP BY time 
   order by time ASC";
 
@@ -68,7 +68,7 @@ $res = $db->select($sql)->rows();
 
 $sql = "select MAX(value) as value, {$quantorFunction} as time
  FROM zes.counter3
- WHERE date >= '2019-01-04'
+ WHERE time >= '2019-01-03 21:00:00'
  GROUP BY time
 order by time ASC";
 $res2 = $db->select($sql)->rows();
