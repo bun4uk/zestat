@@ -64,7 +64,6 @@ $sql = "select sum(toInt16(growth)) as growth, {$quantorFunction} as time
  WHERE toDate(time) = '{$date}'
  GROUP BY time 
   order by time ASC";
-//print_r($sql); die;
 
 $res = $db->select($sql)->rows();
 
