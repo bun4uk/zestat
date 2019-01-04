@@ -36,13 +36,13 @@ $availableQuantors = [
     60
 ];
 
-$quantor = $_GET['q'] ?? 5;
+$quantor = intval($_GET['q']) ?? 5;
 
 if (!in_array($quantor, $availableQuantors)) {
     $quantor = 5;
 }
 
-$date = $_GET['date'] ?? (new \DateTimeImmutable())->format('Y-m-d');
+$date = date('Y-m-d', strtotime($_GET['date'])) ?? (new \DateTimeImmutable())->format('Y-m-d');
 
 switch ($quantor) {
     case 1:
