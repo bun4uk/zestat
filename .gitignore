@@ -1,2 +1,7 @@
 composer.lock
+<<<<<<< HEAD
 composer.json
+=======
+composer.json
+.idea/
+>>>>>>> 4c4fc6c7fe150117f5dea0fb2403a9f2a3f60cd0
