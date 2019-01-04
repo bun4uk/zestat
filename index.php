@@ -6,7 +6,7 @@
     <style>
         body {
             background-color: #04133b;
-            font-family: sans-serif;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
         }
 
         .chartBody {
@@ -17,7 +17,8 @@
         .center {
             text-align: center
         }
-        h5{
+
+        h5 {
             margin: 5px;
         }
     </style>
@@ -31,7 +32,6 @@
 </div>
 <div class="chartBody">
     <canvas id="myChart" style="height:40vh; width:80vw"></canvas>
-    <canvas id="myChart2" style="height:40vh; width:80vw"></canvas>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
@@ -40,6 +40,7 @@
     var _toArray = function (arr) {
         return Array.isArray(arr) ? arr : [].slice.call(arr);
     };
+
     var data = {
         growth: {
             data: [],
@@ -52,63 +53,77 @@
     };
 
     var options = {
+        tooltips: {
+            intersect: false,
+            mode: 'x'
+        },
         animation: {
             duration: 0
         },
         scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    callback: function (value) {
-                        return Number(value.toString());
+            yAxes: [
+                {
+                    id: 'y-axis-1',
+                    position: 'left',
+                    ticks: {
+                        beginAtZero: false,
+                        callback: function (value) {
+                            return Number(value.toString());
+                        }
+                    },
+                    type: 'logarithmic',
+                    gridLines: {
+                        color: 'rgba(41,169,255,0.2)'
                     }
                 },
-                type: 'logarithmic',
-                gridLines: {
-                    color: 'rgba(41,169,255,0.2)'
+                {
+                    id: 'y-axis-2',
+                    position: 'right',
+                    ticks: {
+                        beginAtZero: false,
+                        callback: function (value) {
+                            return Number(value.toString());
+                        }
+                    },
+                    type: 'logarithmic',
+                    gridLines: {
+                        color: 'rgba(41,169,255,0.2)'
+                    }
                 }
-            }],
+            ],
             xAxes: [{
                 display: false
             }]
         }
-    }
+    };
 
     var ctx = document.getElementById("myChart").getContext('2d');
-    var ctx2 = document.getElementById("myChart2").getContext('2d');
 
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: data.growth.labels,
-            datasets: [{
-                data: data.growth.data,
-                borderWidth: 1.5,
-                label: 'Прирост заполненных анкет',
-                borderColor: '#2aabff',
-                backgroundColor: 'rgba(41,169,255,0.3)',
-                pointBackgroundColor: '#2aabff',
-                pointRadius: 2
-
-            }]
-        },
-        options: options
-    });
-
-    var myChart2 = new Chart(ctx2, {
-        type: 'line',
-        data: {
-            labels: data.vals.labels,
-            datasets: [{
-                data: data.vals.data,
-                borderWidth: 1.5,
-                label: 'Сумма заполненных анкет',
-                borderColor: '#2aabff',
-                backgroundColor: 'rgba(41,169,255,0.3)',
-                pointBackgroundColor: '#2aabff',
-                pointRadius: 2
-
-            }]
+            datasets: [
+                {
+                    data: data.growth.data,
+                    borderWidth: 1.5,
+                    label: 'Прирост заполненных анкет',
+                    borderColor: '#2aabff',
+                    backgroundColor: 'rgba(41,169,255,0.3)',
+                    pointBackgroundColor: '#2aabff',
+                    pointRadius: 2,
+                    yAxisID: 'y-axis-1'
+                },
+                {
+                    data: data.vals.data,
+                    borderWidth: 1.5,
+                    label: 'Сумма заполненных анкет',
+                    borderColor: '#df6c5a',
+                    backgroundColor: 'rgba(223, 106, 88, 0.3)',
+                    pointBackgroundColor: '#df6c5a',
+                    pointRadius: 2,
+                    yAxisID: 'y-axis-2'
+                }]
         },
         options: options
     });
@@ -121,14 +136,11 @@
             .then((json) => {
                 myChart.data.labels = json.growth.labels;
                 myChart.data.datasets[0].data = json.growth.data;
+                myChart.data.datasets[1].data = json.vals.data;
+
+                myChart.options.scales.yAxes[1].ticks.min = Math.min.apply(null, _toArray(json.vals.data));
+                myChart.options.scales.yAxes[1].ticks.max = Math.max.apply(null, _toArray(json.vals.data));
                 myChart.update();
-
-                myChart2.data.labels = json.vals.labels;
-                myChart2.data.datasets[0].data = json.vals.data;
-                myChart2.options.scales.yAxes[0].ticks.min = Math.min.apply(null, _toArray(json.vals.data));
-                myChart2.options.scales.yAxes[0].ticks.max = Math.max.apply(null, _toArray(json.vals.data));
-                myChart2.update();
-
 
                 setTimeout(load, 30000);
             });
@@ -139,7 +151,11 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129298968-2"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
     gtag('js', new Date());
 
     gtag('config', 'UA-129298968-2');
