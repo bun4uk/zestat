@@ -17,21 +17,29 @@
         .center {
             text-align: center
         }
+        h5{
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
 <div class="center">
     <h1 style="color: #fff;">Статистика анкет на сайте Ze2019.com</h1>
-    <h4 style="color: #ccc;">* обновляется раз в минуту</h4>
+    <h5 style="color: #ccc;">* график сгруппирован по 5 минут</h5>
+    <h5 style="color: #ccc;">* обновляется раз в минуту</h5>
+    <h5 style="color: #ccc;">* треккинг не работал с 9:00 до 10:35, поэтому наблюдается скачок</h5>
 </div>
 <div class="chartBody">
-    <canvas id="myChart" style="height:50vh; width:80vw"></canvas>
-    <canvas id="myChart2" style="height:50vh; width:80vw"></canvas>
+    <canvas id="myChart" style="height:40vh; width:80vw"></canvas>
+    <canvas id="myChart2" style="height:40vh; width:80vw"></canvas>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
 <script>
+    var _toArray = function (arr) {
+        return Array.isArray(arr) ? arr : [].slice.call(arr);
+    };
     var data = {
         growth: {
             data: [],
@@ -76,7 +84,7 @@
             datasets: [{
                 data: data.growth.data,
                 borderWidth: 1.5,
-                label: 'Growth',
+                label: 'Прирост заполненных анкет',
                 borderColor: '#2aabff',
                 backgroundColor: 'rgba(41,169,255,0.3)',
                 pointBackgroundColor: '#2aabff',
@@ -94,7 +102,7 @@
             datasets: [{
                 data: data.vals.data,
                 borderWidth: 1.5,
-                label: 'Growth',
+                label: 'Сумма заполненных анкет',
                 borderColor: '#2aabff',
                 backgroundColor: 'rgba(41,169,255,0.3)',
                 pointBackgroundColor: '#2aabff',
@@ -117,7 +125,10 @@
 
                 myChart2.data.labels = json.vals.labels;
                 myChart2.data.datasets[0].data = json.vals.data;
+                myChart2.options.scales.yAxes[0].ticks.min = Math.min.apply(null, _toArray(json.vals.data));
+                myChart2.options.scales.yAxes[0].ticks.max = Math.max.apply(null, _toArray(json.vals.data));
                 myChart2.update();
+
 
                 setTimeout(load, 30000);
             });
