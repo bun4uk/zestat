@@ -170,7 +170,7 @@
                 myChart.options.scales.yAxes[1].ticks.max = Math.max.apply(null, _toArray(json.vals.data));
                 myChart.update();
 
-                document.getElementById('total').innerHTML = json.total
+                document.getElementById('total').innerHTML = json.total;
 
                 setTimeout(load, 30000);
             });
