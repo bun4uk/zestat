@@ -36,13 +36,13 @@ $availableQuantors = [
     60
 ];
 
-$quantor = $_GET['q'] ?? 5;
+$quantor = intval($_GET['q']) ?? 5;
 
 if (!in_array($quantor, $availableQuantors)) {
     $quantor = 5;
 }
 
-$date = $_GET['date'] ?? (new \DateTimeImmutable())->format('Y-m-d');
+$date = date('Y-m-d', strtotime($_GET['date'])) ?? (new \DateTimeImmutable())->format('Y-m-d');
 
 switch ($quantor) {
     case 1:
@@ -78,9 +78,11 @@ $res2 = $db->select($sql)->rows();
 $rows = $res;
 
 $array = [];
+$total = 0;
 foreach ($rows as $row) {
     $array['labels'][] = date("Y-m-d H:i:s", strtotime($row['time'] . " + 2 hours"));
     $array['data'][] = (int)$row['growth'];
+    $total += $row['growth'];
 }
 
 $array2 = [];
@@ -89,6 +91,6 @@ foreach ($res2 as $row) {
     $array2['data'][] = (int)$row['value'];
 }
 
-$result = ['growth' => $array, 'vals' => $array2];
+$result = ['growth' => $array, 'vals' => $array2, 'total' => $total];
 echo json_encode($result);
 die;

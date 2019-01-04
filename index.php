@@ -30,7 +30,6 @@
 <body>
 <div class="center">
     <h1 style="color: #fff;">Статистика анкет на сайте Ze2019.com</h1>
-    <h5 style="color: #ccc;">* график сгруппирован по 5 минут</h5>
     <h5 style="color: #ccc;">* обновляется раз в минуту</h5>
     <h5 style="color: #ccc;">* треккинг не работал с 9:00 до 10:35, поэтому наблюдается скачок</h5>
 </div>
@@ -42,7 +41,9 @@
         <option value="15">15 минут</option>
         <option value="60">1 час</option>
     </select>
-    <input type="date" id="date" data-date="" data-date-format="DD MMMM YYYY">
+    <input type="date" id="date" data-date="" value="<?php echo date("d m Y")?>" data-date-format="DD MMMM YYYY">
+    <hr>
+    <p>Всего заполнено анкет за выбранный день</span>: <b id="total"></b></p>
 </div>
 <div class="chartBody">
     <canvas id="myChart" style="height:40vh; width:80vw"></canvas>
@@ -182,6 +183,8 @@
                 myChart.options.scales.yAxes[1].ticks.min = Math.min.apply(null, _toArray(data.vals.data));
                 myChart.options.scales.yAxes[1].ticks.max = Math.max.apply(null, _toArray(data.vals.data));
                 myChart.update();
+
+                document.getElementById('total').innerHTML = json.total;
             }
 
             setTimeout(load, 30000);
