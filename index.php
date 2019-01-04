@@ -82,7 +82,8 @@
         vals: {
             data: [],
             labels: []
-        }
+        },
+        total: 0
     };
 
     var options = {
@@ -184,7 +185,7 @@
                 myChart.options.scales.yAxes[1].ticks.max = Math.max.apply(null, _toArray(data.vals.data));
                 myChart.update();
 
-                document.getElementById('total').innerHTML = json.total;
+                document.getElementById('total').innerHTML = data.total;
             }
 
             setTimeout(load, 30000);
