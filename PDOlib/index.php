@@ -13,7 +13,7 @@ class PdoLib {
         $db = Msqlconfig::$_dbname;
         $user = Msqlconfig::$_user;
         $pass = Msqlconfig::$_pass;
-        $charset = 'utf8';
+        $charset = 'utf8';https://zestat.space/
         $dbh = new \PDO('mysql:host='.$host.';dbname='.$db, $user, $pass);
         $this->mysql = $dbh;
 

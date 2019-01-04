@@ -73,6 +73,7 @@ $res2 = $db->select($sql)->rows();
 
 $rows = $res;
 $array = [];
+$total = 0;
 foreach ($rows as $row) {
     $array['labels'][] = date("Y-m-d H:i:s", strtotime($row['time'] . " + 2 hours"));
     $array['data'][] = (int)$row['growth'];

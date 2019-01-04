@@ -41,7 +41,7 @@
         <option value="15">15 минут</option>
         <option value="60">1 час</option>
     </select>
-    <input type="date" id="date" data-date="" data-date-format="DD MMMM YYYY">
+    <input type="date" id="date" data-date="" value="<?php echo date("d m Y")?>" data-date-format="DD MMMM YYYY">
     <hr>
     <p>Всего заполнено анкет за выбранный день</span>: <b id="total"></b></p>
 </div>
@@ -50,18 +50,22 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-
 <script>
+    var nd = new Date();
+    var date = nd.getFullYear() + '-' + ('0' + (nd.getMonth() + 1)).slice(-2) + '-' + ('0' + nd.getDate()).slice(-2);
+
+    var dateEl = document.getElementById('date');
+    dateEl.value = date;
+
     var el = document.getElementById('minutes');
     var minutes = el.value;
-    var dateEl = document.getElementById('date');
-    dateEl.valueAsDate = new Date();
-    var date = dateEl.value;
-    el.addEventListener('change', (e) => {
+
+    el.addEventListener('change', function(e) {
         minutes = e.target.value;
         load();
     });
-    dateEl.addEventListener('change', (e) => {
+
+    dateEl.addEventListener('change', function(e) {
         date = e.target.value;
         load();
     });
@@ -160,18 +164,31 @@
     load();
 
     function load() {
-        fetch('/info.php?q=' + minutes + '&date=' + date)
-            .then((response) => response.json())
-            .then((json) => {
-                myChart.data.labels = json.growth.labels;
-                myChart.data.datasets[0].data = json.growth.data;
-                myChart.data.datasets[1].data = json.vals.data;
-                myChart.options.scales.yAxes[1].ticks.min = Math.min.apply(null, _toArray(json.vals.data));
-                myChart.options.scales.yAxes[1].ticks.max = Math.max.apply(null, _toArray(json.vals.data));
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", '/info.php?q=' + minutes + '&date=' + date, true);
+        xhr.send();
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState != 4) return;
+
+            if (xhr.status != 200) {
+                console.log(xhr.status + ': ' + xhr.statusText);
+            } else {
+                data = JSON.parse(xhr.responseText);
+
+                myChart.data.labels = data.growth.labels;
+                myChart.data.datasets[0].data = data.growth.data;
+                myChart.data.datasets[1].data = data.vals.data;
+
+                myChart.options.scales.yAxes[1].ticks.min = Math.min.apply(null, _toArray(data.vals.data));
+                myChart.options.scales.yAxes[1].ticks.max = Math.max.apply(null, _toArray(data.vals.data));
                 myChart.update();
-                document.getElementById('total').innerHTML = json.total
-                setTimeout(load, 30000);
-            });
+
+                document.getElementById('total').innerHTML = json.total;
+            }
+
+            setTimeout(load, 30000);
+        }
     }
 </script>
 
