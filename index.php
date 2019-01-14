@@ -153,7 +153,8 @@
     var options = {
         tooltips: {
             intersect: false,
-            mode: 'x'
+            mode: 'x',
+            position: 'nearest'
         },
         animation: {
             duration: 0
@@ -184,9 +185,9 @@
                         }
                     },
                     // type: 'logarithmic',
-                    gridLines: {
-                        color: 'rgba(41,169,255,0.2)'
-                    }
+                    // gridLines: {
+                    //     color: 'rgba(41,169,255,0.2)'
+                    // }
                 }
             ],
             xAxes: [{
