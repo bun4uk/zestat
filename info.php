@@ -33,7 +33,8 @@ $availableQuantors = [
     1,
     5,
     15,
-    60
+    60,
+    1440
 ];
 if (!in_array($quantor, $availableQuantors)) {
     $quantor = 5;
@@ -51,6 +52,9 @@ switch ($quantor) {
         break;
     case 60:
         $quantorFunction = 'toStartOfHour(time)';
+        break;
+    case 1440:
+        $quantorFunction = 'toStartOfDay(time)';
         break;
 }
 

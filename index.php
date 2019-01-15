@@ -44,6 +44,7 @@
         <option selected value="5">5 минут</option>
         <option value="15">15 минут</option>
         <option value="60">1 час</option>
+        <option value="1440">1 день</option>
     </select>
     <!--        <input type="text" id="date">-->
     <label for="pickerStart">От</label>
@@ -53,7 +54,7 @@
     <input type="checkbox" id="logarithmic" name="logarithmic" onclick="logarithmicReload()">
     <label for="logarithmic">Логарифмическая шкала</label>
     <hr>
-    <p>Всего заполнено анкет за выбранный день</span>: <b id="total"></b></p>
+    <p>Всего заполнено анкет за выбранный период</span>: <b id="total"></b></p>
 </div>
 <div class="chartBody">
     <canvas id="myChart" style="height:40vh; width:80vw"></canvas>
